@@ -31,41 +31,47 @@
 }
 
 html{
-  scroll-behavior:smooth;
+scroll-behavior:smooth;
+background-color:#050b14; /* إضافة */
 }
 
 body{
-  min-height:100vh;
-  color:var(--text);
-  overflow-x:hidden;
-  background:
-    radial-gradient(circle at 18% 12%, rgba(31,111,235,.22), transparent 18%),
-    radial-gradient(circle at 82% 16%, rgba(244,197,66,.14), transparent 16%),
-    radial-gradient(circle at 56% 76%, rgba(90,162,255,.10), transparent 22%),
-    linear-gradient(180deg,#050b14 0%, #07111d 46%, #050b14 100%);
-  background-attachment:fixed;
+color:var(--text);
+overflow-x:hidden;
+background:
+radial-gradient(circle at 18% 18%, rgba(31,111,235,.18), transparent 18%),
+radial-gradient(circle at 82% 12%, rgba(244,197,66,.12), transparent 16%),
+radial-gradient(circle at 65% 72%, rgba(90,162,255,.10), transparent 22%),
+linear-gradient(180deg,#050b14 0%, #07111d 38%, #050b14 100%);
+background-attachment:fixed;
+
+background-color:#050b14; /* إضافة */
+-webkit-backface-visibility:hidden; /* حل الوميض */
+backface-visibility:hidden; /* حل الوميض */
 }
 
 body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  pointer-events:none;
-  background:
-    linear-gradient(120deg, rgba(255,255,255,.04), transparent 20%, rgba(255,255,255,.02) 50%, transparent 80%);
-  z-index:-2;
+content:"";
+position:fixed;
+inset:0;
+pointer-events:none;
+background:
+linear-gradient(120deg, rgba(255,255,255,.03), transparent 22%, rgba(255,255,255,.02) 50%, transparent 78%),
+radial-gradient(circle at 50% 10%, rgba(255,255,255,.05), transparent 22%);
+z-index:-1;
 }
 
 body::after{
-  content:"";
-  position:fixed;
-  inset:auto -10% -18% -10%;
-  height:55vh;
-  pointer-events:none;
-  background:radial-gradient(circle, rgba(31,111,235,.12), transparent 60%);
-  filter:blur(40px);
-  z-index:-2;
+content:"";
+position:fixed;
+inset:auto -10% -18% -10%;
+height:50vh;
+pointer-events:none;
+background: radial-gradient(circle, rgba(31,111,235,.10), transparent 60%);
+filter: blur(35px);
+z-index:-1;
 }
+  
 
 /* TOP BAR */
 header{
@@ -636,8 +642,8 @@ updateClock();
 setInterval(updateClock, 1000);
 
 const TEST_CONFIG = {
-  pingUrl: "https://speed.cloudflare.com/__down?bytes=20",
-  downloadUrl: "https://speed.cloudflare.com/__down?bytes=25000000",
+  pingUrl: "https://speed.measurementlab.net/20mb.bin",
+  downloadUrl: "https://speed.measurementlab.net/50mb.bin",
   uploadUrl: "https://speed.cloudflare.com/__up",
   uploadSizeMB: 10
 };
