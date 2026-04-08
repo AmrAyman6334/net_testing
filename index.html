@@ -1,0 +1,896 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>GxTest.net</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+:root{
+  --bg:#050b14;
+  --line:rgba(255,255,255,.08);
+  --text:#f4f7fb;
+  --muted:#a8b3c7;
+  --blue:#1f6feb;
+  --blue2:#5aa2ff;
+  --gold:#f4c542;
+  --green:#27c93f;
+  --red:#ff5f56;
+  --accent:var(--blue2);
+  --progress:0deg;
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:'Cairo',sans-serif;
+}
+
+html{
+  scroll-behavior:smooth;
+}
+
+body{
+  min-height:100vh;
+  color:var(--text);
+  overflow-x:hidden;
+  background:
+    radial-gradient(circle at 18% 12%, rgba(31,111,235,.22), transparent 18%),
+    radial-gradient(circle at 82% 16%, rgba(244,197,66,.14), transparent 16%),
+    radial-gradient(circle at 56% 76%, rgba(90,162,255,.10), transparent 22%),
+    linear-gradient(180deg,#050b14 0%, #07111d 46%, #050b14 100%);
+  background-attachment:fixed;
+}
+
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    linear-gradient(120deg, rgba(255,255,255,.04), transparent 20%, rgba(255,255,255,.02) 50%, transparent 80%);
+  z-index:-2;
+}
+
+body::after{
+  content:"";
+  position:fixed;
+  inset:auto -10% -18% -10%;
+  height:55vh;
+  pointer-events:none;
+  background:radial-gradient(circle, rgba(31,111,235,.12), transparent 60%);
+  filter:blur(40px);
+  z-index:-2;
+}
+
+/* TOP BAR */
+header{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  z-index:9999;
+  display:flex;
+  direction:ltr;
+  justify-content:space-between;
+  align-items:center;
+  gap:14px;
+  padding:14px 18px;
+  background:linear-gradient(120deg, rgba(5,11,20,.78), rgba(8,17,31,.62));
+  backdrop-filter:blur(20px) saturate(160%);
+  -webkit-backdrop-filter:blur(20px) saturate(160%);
+  border-bottom:1px solid rgba(255,255,255,.06);
+  box-shadow:0 10px 30px rgba(0,0,0,.28);
+}
+header::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(31,111,235,.7), rgba(244,197,66,.55), transparent);
+  opacity:.65;
+}
+
+.clock{
+  min-width:128px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  color:var(--gold);
+  font-weight:800;
+  letter-spacing:1px;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 8px 25px rgba(0,0,0,.16);
+}
+.clock i{color:var(--blue2)}
+
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  color:var(--text);
+  font-weight:900;
+  letter-spacing:.4px;
+  text-decoration:none;
+  user-select:none;
+  padding:8px 12px;
+  border-radius:14px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.05);
+}
+.brand i{
+  color:var(--gold);
+  filter:drop-shadow(0 0 10px rgba(244,197,66,.18));
+}
+
+/* HERO */
+.hero{
+  min-height:100vh;
+  padding:112px 20px 26px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+
+.hero-inner{
+  width:min(1180px,100%);
+  display:grid;
+  grid-template-columns:1fr .95fr;
+  gap:28px;
+  align-items:center;
+}
+
+.hero-copy{
+  padding:10px 4px;
+  max-width:680px;
+}
+
+.hero h1{
+  font-size:clamp(2.2rem, 5vw, 4.8rem);
+  line-height:1.08;
+  font-weight:900;
+  letter-spacing:.2px;
+  margin-bottom:12px;
+  background:linear-gradient(90deg,var(--blue2),var(--gold));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  text-shadow:0 0 28px rgba(31,111,235,.10);
+}
+
+.hero p{
+  color:var(--muted);
+  font-size:1.03rem;
+  line-height:1.9;
+  max-width:620px;
+}
+
+/* SPEED PANEL */
+.speed-panel{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding-top:6px;
+}
+
+.dial-wrap{
+  width:min(420px,100%);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:18px;
+}
+
+.dial-box{
+  width:100%;
+  aspect-ratio:1;
+  position:relative;
+  display:grid;
+  place-items:center;
+}
+
+.dial-glow{
+  position:absolute;
+  width:74%;
+  height:74%;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(31,111,235,.18), transparent 62%);
+  filter:blur(18px);
+  z-index:-1;
+}
+
+.dial{
+  width:100%;
+  height:100%;
+  border-radius:50%;
+  background:
+    conic-gradient(from 230deg, var(--accent) 0deg var(--progress), rgba(255,255,255,.08) var(--progress) 360deg);
+  box-shadow:
+    0 26px 80px rgba(0,0,0,.45),
+    inset 0 1px 0 rgba(255,255,255,.05);
+  position:relative;
+  transition:background .25s ease;
+}
+
+.dial::before{
+  content:"";
+  position:absolute;
+  inset:18px;
+  border-radius:50%;
+  background:
+    radial-gradient(circle at 30% 25%, rgba(255,255,255,.08), transparent 28%),
+    linear-gradient(180deg, rgba(9,15,28,.95), rgba(6,10,18,.98));
+  border:1px solid rgba(255,255,255,.06);
+  box-shadow:inset 0 2px 12px rgba(0,0,0,.32);
+}
+
+.dial::after{
+  content:"";
+  position:absolute;
+  inset:36px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.05);
+  background:radial-gradient(circle, rgba(31,111,235,.08), transparent 55%);
+  filter:blur(1px);
+}
+
+.dial-core{
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  z-index:3;
+  text-align:center;
+  padding:24px;
+}
+
+.readout{
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:10px;
+  width:100%;
+}
+
+.speed-value{
+  display:flex;
+  align-items:flex-end;
+  gap:8px;
+  line-height:1;
+}
+
+.speed-value span{
+  font-size:clamp(3rem, 8vw, 5.2rem);
+  font-weight:900;
+  color:#fff;
+  text-shadow:0 0 16px rgba(255,255,255,.10);
+}
+
+.speed-value small{
+  color:#d7e0f1;
+  font-size:1rem;
+  font-weight:700;
+  padding-bottom:10px;
+}
+
+.phase{
+  color:var(--muted);
+  font-size:1rem;
+  margin-top:4px;
+}
+
+.subphase{
+  color:#93a4bd;
+  font-size:.92rem;
+  margin-top:2px;
+}
+
+.start-btn{
+  margin-top:6px;
+  border:0;
+  cursor:pointer;
+  padding:14px 22px;
+  min-width:210px;
+  border-radius:16px;
+  font-weight:900;
+  color:#fff;
+  background:linear-gradient(45deg,var(--blue),#3b82f6);
+  box-shadow:0 14px 34px rgba(31,111,235,.26), inset 0 1px 0 rgba(255,255,255,.10);
+  transition:.25s ease;
+}
+.start-btn:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 18px 42px rgba(31,111,235,.34);
+}
+.start-btn:disabled{
+  opacity:.8;
+  cursor:not-allowed;
+  transform:scale(.99);
+}
+
+/* RESULTS */
+.results{
+  width:min(1180px,100%);
+  margin:10px auto 0;
+  padding:0 20px 34px;
+}
+
+.results-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+  gap:16px;
+}
+
+.result-card{
+  background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:20px;
+  padding:18px 16px;
+  box-shadow:0 18px 50px rgba(0,0,0,.18);
+  backdrop-filter:blur(10px);
+}
+
+.result-card .label{
+  color:var(--muted);
+  font-size:.9rem;
+  margin-bottom:8px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.result-card .label i{color:var(--blue2)}
+
+.result-card .value{
+  font-size:2rem;
+  font-weight:900;
+  color:#fff;
+  line-height:1;
+}
+
+.result-card .unit{
+  color:#9fb0c8;
+  font-size:.9rem;
+  margin-top:4px;
+}
+
+.result-card .hint{
+  color:#93a4bd;
+  font-size:.88rem;
+  margin-top:10px;
+  line-height:1.6;
+}
+
+/* FOOTER */
+footer{
+  width:100%;
+  padding:18px 20px 24px;
+  border-top:1px solid rgba(255,255,255,.06);
+  background:rgba(5,11,20,.18);
+}
+
+.footer-inner{
+  width:min(1180px,100%);
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  flex-wrap:wrap;
+  color:var(--muted);
+  font-size:.95rem;
+}
+
+.footer-inner a{
+  color:var(--gold);
+  text-decoration:none;
+  font-weight:800;
+  position:relative;
+}
+.footer-inner a::after{
+  content:"";
+  position:absolute;
+  left:0;
+  bottom:-2px;
+  width:0;
+  height:1px;
+  background:var(--gold);
+  transition:.25s ease;
+}
+.footer-inner a:hover::after{
+  width:100%;
+}
+
+/* REVEAL */
+.reveal{
+  opacity:0;
+  transform:translateY(28px);
+  transition:1s ease;
+}
+.reveal.active{
+  opacity:1;
+  transform:translateY(0);
+}
+
+@media(max-width:980px){
+  .hero-inner{
+    grid-template-columns:1fr;
+  }
+  .hero{
+    padding-top:104px;
+  }
+  .speed-panel{
+    margin-top:2px;
+  }
+  .dial-wrap{
+    width:min(390px,100%);
+  }
+}
+
+@media(max-width:640px){
+  header{
+    padding:12px 12px;
+  }
+  .clock{
+    min-width:auto;
+    padding:8px 10px;
+    font-size:.9rem;
+  }
+  .brand{
+    padding:8px 10px;
+    font-size:.95rem;
+  }
+  .hero{
+    padding:96px 16px 20px;
+  }
+  .hero h1{
+    font-size:2.05rem;
+  }
+  .hero p{
+    font-size:.98rem;
+  }
+  .dial-wrap{
+    width:min(340px,100%);
+  }
+  .start-btn{
+    min-width:180px;
+    width:100%;
+  }
+  .result-card .value{
+    font-size:1.8rem;
+  }
+  .footer-inner{
+    justify-content:center;
+    text-align:center;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="clock" id="clock">
+    <i class="fa-regular fa-clock"></i>
+    <span>00:00:00</span>
+  </div>
+
+  <a class="brand" href="#home" aria-label="GxTest.net">
+    <i class="fa-solid fa-bolt"></i>
+    <span>GxTest.net</span>
+  </a>
+</header>
+
+<main class="hero" id="home">
+  <div class="hero-inner">
+    <section class="hero-copy reveal">
+      <h1>اختبر سرعة الإنترنت</h1>
+      <p>أداة بسيطة ومباشرة لقياس سرعة التحميل والرفع واستقرار الشبكة</p>
+    </section>
+
+    <section class="speed-panel reveal">
+      <div class="dial-wrap">
+        <div class="dial-box">
+          <div class="dial-glow"></div>
+          <div class="dial" id="dial" style="--progress:0deg; --accent:var(--blue2);">
+            <div class="dial-core">
+              <div class="readout">
+                <div class="speed-value">
+                  <span id="speedValue">0</span>
+                  <small>Mbps</small>
+                </div>
+                <div class="phase" id="phaseText">جاهز لبدء الاختبار</div>
+                <div class="subphase" id="subPhase">اضغط على زر البدء</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button class="start-btn" id="startBtn">ابدأ الاختبار</button>
+      </div>
+    </section>
+  </div>
+</main>
+
+<section class="results reveal">
+  <div class="results-grid">
+    <div class="result-card">
+      <div class="label"><i class="fa-solid fa-wifi"></i><span>سرعة التحميل</span></div>
+      <div class="value" id="downCard">--</div>
+      <div class="unit">Mbps</div>
+      <div class="hint" id="downHint">سيظهر هنا متوسط سرعة التحميل</div>
+    </div>
+
+    <div class="result-card">
+      <div class="label"><i class="fa-solid fa-upload"></i><span>سرعة الرفع</span></div>
+      <div class="value" id="upCard">--</div>
+      <div class="unit">Mbps</div>
+      <div class="hint" id="upHint">سيظهر هنا متوسط سرعة الرفع</div>
+    </div>
+
+    <div class="result-card">
+      <div class="label"><i class="fa-solid fa-wave-square"></i><span>البنغ</span></div>
+      <div class="value" id="pingCard">--</div>
+      <div class="unit">ms</div>
+      <div class="hint" id="pingHint">زمن الاستجابة من السيرفر</div>
+    </div>
+
+    <div class="result-card">
+      <div class="label"><i class="fa-solid fa-shield-heart"></i><span>التقييم</span></div>
+      <div class="value" id="qualityCard">—</div>
+      <div class="unit">الشبكة</div>
+      <div class="hint" id="qualityHint">تقييم سريع حسب النتائج</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-center">
+      © 2026 
+      <a href="https://globalx.com" target="_blank" rel="noopener" class="footer-brand">
+        Global X
+      </a> 
+      • All rights reserved
+      <br>
+      Developed by 
+      <a href="https://website7-sandy.vercel.app/" target="_blank" rel="noopener">Amr Ayman</a>
+    </div>
+  </div>
+</footer>
+
+<style>
+.footer-inner {
+  width: min(1180px, 100%);
+  margin: auto;
+  display: flex;
+  justify-content: center; /* center content */
+  align-items: center;
+  flex-wrap: wrap;
+  color: var(--muted);
+  font-size: .95rem;
+  text-align: center; /* center text */
+  gap: 8px;
+}
+
+.footer-inner a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 800;
+  position: relative;
+}
+
+.footer-inner a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: .25s ease;
+}
+
+.footer-inner a:hover::after {
+  width: 100%;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.footer-brand::before {
+  content: "\f3c5"; /* location/map icon from FontAwesome */
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 0.85rem;
+  color: var(--gold);
+}
+</style>
+  
+
+<script>
+function updateClock(){
+  const now = new Date();
+  const time = new Intl.DateTimeFormat('ar-EG', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  }).format(now);
+
+  const el = document.querySelector("#clock span");
+  if (el) el.textContent = time;
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+const TEST_CONFIG = {
+  pingUrl: "https://speed.cloudflare.com/__down?bytes=20",
+  downloadUrl: "https://speed.cloudflare.com/__down?bytes=25000000",
+  uploadUrl: "https://speed.cloudflare.com/__up",
+  uploadSizeMB: 10
+};
+
+const els = {
+  startBtn: document.getElementById("startBtn"),
+  speedValue: document.getElementById("speedValue"),
+  phaseText: document.getElementById("phaseText"),
+  subPhase: document.getElementById("subPhase"),
+  dial: document.getElementById("dial"),
+  pingCard: document.getElementById("pingCard"),
+  downCard: document.getElementById("downCard"),
+  upCard: document.getElementById("upCard"),
+  qualityCard: document.getElementById("qualityCard"),
+  qualityHint: document.getElementById("qualityHint"),
+  pingHint: document.getElementById("pingHint"),
+  downHint: document.getElementById("downHint"),
+  upHint: document.getElementById("upHint")
+};
+
+let running = false;
+let currentSpeed = 0;
+let speedRAF = null;
+let speedTarget = 0;
+
+function setAccent(color){
+  document.documentElement.style.setProperty('--accent', color);
+}
+
+function setDialFromSpeed(speed, cap = 300){
+  const progress = Math.max(0, Math.min(speed, cap)) / cap * 360;
+  els.dial.style.setProperty('--progress', `${progress}deg`);
+}
+
+function animateSpeedTo(target){
+  speedTarget = Math.max(0, target);
+  if (speedRAF) cancelAnimationFrame(speedRAF);
+
+  const step = () => {
+    const diff = speedTarget - currentSpeed;
+    currentSpeed += diff * 0.12;
+    if (Math.abs(diff) < 0.08) currentSpeed = speedTarget;
+
+    els.speedValue.textContent = currentSpeed.toFixed(currentSpeed < 10 ? 1 : 0);
+    setDialFromSpeed(currentSpeed);
+
+    if (Math.abs(speedTarget - currentSpeed) > 0.08) {
+      speedRAF = requestAnimationFrame(step);
+    } else {
+      speedRAF = null;
+    }
+  };
+
+  step();
+}
+
+function setPhase(phase, sub = "") {
+  els.phaseText.textContent = phase;
+  els.subPhase.textContent = sub;
+}
+
+function resetUI() {
+  currentSpeed = 0;
+  animateSpeedTo(0);
+  setAccent("var(--blue2)");
+  setPhase("جاهز لبدء الاختبار", "اضغط على زر البدء");
+  els.startBtn.textContent = "ابدأ الاختبار";
+  els.startBtn.disabled = false;
+
+  els.pingCard.textContent = "--";
+  els.downCard.textContent = "--";
+  els.upCard.textContent = "--";
+  els.qualityCard.textContent = "—";
+
+  els.pingHint.textContent = "زمن الاستجابة من السيرفر";
+  els.downHint.textContent = "سيظهر هنا متوسط سرعة التحميل";
+  els.upHint.textContent = "سيظهر هنا متوسط سرعة الرفع";
+  els.qualityHint.textContent = "تقييم سريع حسب النتائج";
+}
+
+function sleep(ms){
+  return new Promise(r => setTimeout(r, ms));
+}
+
+async function measurePing(){
+  const samples = [];
+  for (let i = 0; i < 3; i++) {
+    const url = `${TEST_CONFIG.pingUrl}${TEST_CONFIG.pingUrl.includes("?") ? "&" : "?"}cb=${Date.now()}-${i}`;
+    const t0 = performance.now();
+    const res = await fetch(url, { cache: "no-store", mode: "cors" });
+    await res.arrayBuffer();
+    samples.push(performance.now() - t0);
+    await sleep(120);
+  }
+  return samples.reduce((a, b) => a + b, 0) / samples.length;
+}
+
+async function measureDownload(onProgress){
+  const url = `${TEST_CONFIG.downloadUrl}${TEST_CONFIG.downloadUrl.includes("?") ? "&" : "?"}cb=${Date.now()}`;
+  const t0 = performance.now();
+  const res = await fetch(url, { cache: "no-store", mode: "cors" });
+
+  if (!res.body) {
+    const buf = await res.arrayBuffer();
+    const t = (performance.now() - t0) / 1000;
+    return (buf.byteLength * 8) / t / 1e6;
+  }
+
+  const reader = res.body.getReader();
+  let received = 0;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    received += value.byteLength;
+    const elapsed = (performance.now() - t0) / 1000;
+    const mbps = (received * 8) / elapsed / 1e6;
+    onProgress(mbps);
+  }
+
+  const totalTime = (performance.now() - t0) / 1000;
+  return (received * 8) / totalTime / 1e6;
+}
+
+function measureUpload(onProgress){
+  return new Promise((resolve, reject) => {
+    const sizeBytes = TEST_CONFIG.uploadSizeMB * 1024 * 1024;
+    const buffer = new Uint8Array(sizeBytes);
+    crypto.getRandomValues(buffer.subarray(0, Math.min(buffer.length, 65536)));
+
+    const blob = new Blob([buffer], { type: "application/octet-stream" });
+    const xhr = new XMLHttpRequest();
+    const t0 = performance.now();
+
+    xhr.open("POST", TEST_CONFIG.uploadUrl + "?cb=" + Date.now(), true);
+    xhr.timeout = 30000;
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && e.loaded > 0) {
+        const elapsed = (performance.now() - t0) / 1000;
+        const mbps = (e.loaded * 8) / elapsed / 1e6;
+        onProgress(mbps);
+      }
+    };
+
+    xhr.onload = () => {
+      const totalTime = (performance.now() - t0) / 1000;
+      const mbps = (sizeBytes * 8) / totalTime / 1e6;
+      resolve(mbps);
+    };
+
+    xhr.onerror = () => reject(new Error("Upload failed"));
+    xhr.ontimeout = () => reject(new Error("Upload timeout"));
+
+    xhr.send(blob);
+  });
+}
+
+function qualityFromResults(ping, down, up){
+  if (ping < 25 && down >= 100 && up >= 50) return { text: "ممتاز", hint: "شبكة قوية جدًا", color: "var(--green)" };
+  if (ping < 45 && down >= 50 && up >= 20) return { text: "جيد جدًا", hint: "أداء قوي ومناسب", color: "var(--blue2)" };
+  if (ping < 80 && down >= 20 && up >= 10) return { text: "جيد", hint: "نتائج مناسبة", color: "var(--gold)" };
+  return { text: "متوسط", hint: "قد تحتاج شبكة أقوى", color: "var(--red)" };
+}
+
+async function runTest(){
+  if (running) return;
+  running = true;
+
+  els.startBtn.disabled = true;
+  els.startBtn.textContent = "جاري الاختبار...";
+  setPhase("بدء القياس", "تحضير الاتصال");
+  setAccent("var(--blue2)");
+
+  try{
+    setPhase("قياس البنغ", "جاري اختبار زمن الاستجابة");
+    animateSpeedTo(3.5);
+    const ping = await measurePing();
+    els.pingCard.textContent = ping.toFixed(0);
+    els.pingHint.textContent = "تم قياس زمن الاستجابة";
+    animateSpeedTo(0);
+    await sleep(350);
+
+    setPhase("اختبار التحميل", "جاري قياس السرعة");
+    setAccent("var(--gold)");
+    let latestDown = 0;
+    const down = await measureDownload((mbps) => {
+      latestDown = mbps;
+      animateSpeedTo(mbps);
+      els.downCard.textContent = mbps.toFixed(1);
+      els.downHint.textContent = "القياس لحظي";
+    });
+    els.downCard.textContent = down.toFixed(1);
+    animateSpeedTo(Math.max(0, latestDown * 0.65));
+    await sleep(350);
+
+    setPhase("اختبار الرفع", "جاري قياس السرعة");
+    setAccent("var(--green)");
+    let latestUp = 0;
+    const up = await measureUpload((mbps) => {
+      latestUp = mbps;
+      animateSpeedTo(mbps);
+      els.upCard.textContent = mbps.toFixed(1);
+      els.upHint.textContent = "القياس لحظي";
+    });
+    els.upCard.textContent = up.toFixed(1);
+    animateSpeedTo(Math.max(0, latestUp * 0.7));
+    await sleep(400);
+
+    const quality = qualityFromResults(ping, down, up);
+    els.qualityCard.textContent = quality.text;
+    els.qualityHint.textContent = quality.hint;
+    setAccent(quality.color);
+
+    setPhase("انتهى الاختبار", "يمكنك إعادة التشغيل");
+    els.startBtn.textContent = "اختبار جديد";
+    els.startBtn.disabled = false;
+    running = false;
+  } catch (err){
+    setPhase("تعذر القياس", "تحقق من روابط الاختبار");
+    els.startBtn.textContent = "اختبار جديد";
+    els.startBtn.disabled = false;
+    running = false;
+
+    els.qualityCard.textContent = "خطأ";
+    els.qualityHint.textContent = "قد تحتاج روابط اختبار مختلفة";
+    setAccent("var(--red)");
+    animateSpeedTo(0);
+    console.error(err);
+  }
+}
+
+els.startBtn.addEventListener("click", () => {
+  if (!running && els.startBtn.textContent.includes("اختبار جديد")) {
+    resetUI();
+  }
+  runTest();
+});
+
+function revealNow(){
+  document.querySelectorAll(".reveal").forEach(el => {
+    const top = el.getBoundingClientRect().top;
+    if (top < window.innerHeight - 120) el.classList.add("active");
+  });
+}
+
+window.addEventListener("load", () => {
+  resetUI();
+  document.querySelectorAll(".reveal").forEach(el => el.classList.add("active"));
+  revealNow();
+});
+
+window.addEventListener("scroll", revealNow);
+</script>
+</body>
+</html>
